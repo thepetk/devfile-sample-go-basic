@@ -3,16 +3,24 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"flag"
+	"os"
 )
-var port = flag.Int("p", 8080, "server port")
+
+var port = os.Getenv("PORT")
 
 func main() {
-	flag.Parse()
+	if port == "" {
+		port = "8080"
+	}
 	http.HandleFunc("/", HelloServer)
-	http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", *port), nil)
+	http.ListenAndServe(fmt.Sprintf("0.0.0.0:%s", port), nil)
 }
 
 func HelloServer(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello, %s!", r.URL.Path[1:])
+	path := r.URL.Path[1:]
+	if path != "" {
+		fmt.Fprintf(w, "Hello, %s!", r.URL.Path[1:])
+	} else {
+		fmt.Fprint(w, "Hello World!")
+	}
 }

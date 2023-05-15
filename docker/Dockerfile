@@ -1,12 +1,11 @@
-FROM registry.access.redhat.com/ubi9/go-toolset:latest
+FROM registry.access.redhat.com/ubi9/go-toolset:1.18.9-14
 
-COPY go.mod ./
+COPY . .
 RUN go mod download
-
-COPY *.go ./
 
 RUN go build -o ./main
 
+ENV PORT 8081
 EXPOSE 8081
 
-CMD [ "./main" , "-p=8081"]
+CMD [ "./main" ]
