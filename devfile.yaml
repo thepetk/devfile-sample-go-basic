@@ -20,35 +20,35 @@ parent:
   commands:
   - id: build-image
     apply:
-      component: image-build
+      component: build
   - id: deployk8s
     apply:
-      component: kubernetes-deploy
+      component: deploy
   - id: deploy
     composite:
       commands:
-        - build-image
+        - build
         - deployk8s
       group:
         kind: deploy
         isDefault: true
-components:
-  - name: image-build
-    image:
-      imageName: go-image:latest
-      dockerfile:
-        uri: docker/Dockerfile
-        buildContext: .
-        rootRequired: false
-  - name: kubernetes-deploy
-    attributes:
-      deployment/replicas: 1
-      deployment/cpuRequest: 10m
-      deployment/memoryRequest: 10Mi
-      deployment/container-port: 8081
-    kubernetes:
-      uri: deploy.yaml
-      endpoints:
-      - name: http-8081
-        targetPort: 8081
-        path: /
+  components:
+    - name: build
+      image:
+        imageName: go-image:latest
+        dockerfile:
+          uri: docker/Dockerfile
+          buildContext: .
+          rootRequired: false
+    - name: deploy
+      attributes:
+        deployment/replicas: 1
+        deployment/cpuRequest: 10m
+        deployment/memoryRequest: 10Mi
+        deployment/container-port: 8081
+      kubernetes:
+        uri: kubernetes/deploy.yaml
+        endpoints:
+        - name: http-8081
+          targetPort: 8081
+          path: /
