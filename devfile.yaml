@@ -16,6 +16,22 @@ metadata:
 parent:
   id: go
   registryUrl: 'https://registry.devfile.io'
+  version: 2.1.0
+  commands:
+  - id: build-image
+    apply:
+      component: image-build
+  - id: deployk8s
+    apply:
+      component: kubernetes-deploy
+  - id: deploy
+    composite:
+      commands:
+        - build-image
+        - deployk8s
+      group:
+        kind: deploy
+        isDefault: true
 components:
   - name: image-build
     image:
@@ -36,18 +52,3 @@ components:
       - name: http-8081
         targetPort: 8081
         path: /
-commands:
-  - id: build-image
-    apply:
-      component: image-build
-  - id: deployk8s
-    apply:
-      component: kubernetes-deploy
-  - id: deploy
-    composite:
-      commands:
-        - build-image
-        - deployk8s
-      group:
-        kind: deploy
-        isDefault: true
