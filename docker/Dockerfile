@@ -5,7 +5,7 @@ RUN go mod download
 
 RUN go build -o ./main
 
-ENV PORT 8081
-EXPOSE 8081
+ENV PORT 8080
+EXPOSE 8080
 
 CMD [ "./main" ]
