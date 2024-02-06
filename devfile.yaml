@@ -12,43 +12,52 @@ metadata:
   provider: Red Hat
   supportUrl: https://github.com/devfile-samples/devfile-support#support-information
   attributes:
-    alpha.dockerimage-port: 8081
+    alpha.dockerimage-port: 8080
 parent:
   id: go
   registryUrl: 'https://registry.devfile.io'
+  version: 2.1.0
 components:
-  - name: image-build
+  - name: image-build-go
     image:
       imageName: go-image:latest
       dockerfile:
         uri: docker/Dockerfile
         buildContext: .
         rootRequired: false
-  - name: kubernetes-deploy
+  - name: kubernetes-deploy-go
     attributes:
       deployment/replicas: 1
       deployment/cpuRequest: 10m
       deployment/memoryRequest: 10Mi
-      deployment/container-port: 8081
+      deployment/container-port: 8080
     kubernetes:
       uri: deploy.yaml
       endpoints:
-      - name: http-8081
-        targetPort: 8081
+      - name: http-8080
+        targetPort: 8080
+        path: /
+        secure: true
+  - name: kubernetes-deploy2-go
+    attributes:
+      deployment/replicas: 1
+      deployment/cpuRequest: 10m
+      deployment/memoryRequest: 10Mi
+      deployment/container-port: 8080
+    kubernetes:
+      uri: deploy.yaml
+      endpoints:
+      - name: http-8080
+        targetPort: 8080
         path: /
         secure: true
 commands:
-  - id: build-image
+  - id: build-image-go
     apply:
-      component: image-build
-  - id: deployk8s
+      component: image-build-go
+  - id: deployk8s-go
     apply:
-      component: kubernetes-deploy
-  - id: deploy
-    composite:
-      commands:
-        - build-image
-        - deployk8s
-      group:
-        kind: deploy
-        isDefault: true
+      component: kubernetes-deploy-go
+  - id: deployk8s2-go
+    apply:
+      component: kubernetes-deploy2-go
