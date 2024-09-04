@@ -15,7 +15,8 @@ metadata:
     alpha.dockerimage-port: 8081
 parent:
   id: go
-  registryUrl: 'https://registry.devfile.io'
+  registryUrl: 'https://3990-83-59-144-150.ngrok-free.app'
+  version: 1.2.1
 components:
   - name: image-build
     image:
