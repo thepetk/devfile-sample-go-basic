@@ -10,7 +10,7 @@ var port = os.Getenv("PORT")
 
 func main() {
 	if port == "" {
-		port = "8080"
+		port = "8081"
 	}
 	http.HandleFunc("/", HelloServer)
 	http.ListenAndServe(fmt.Sprintf("0.0.0.0:%s", port), nil)
